@@ -8,6 +8,10 @@ Soma is a small program for the analysis of texts, an outgrowth of an exercise f
 
 My aim was somewhat different, in that making writing style comparisons—while interesting—aren't a desirable end goal. Instead, deriving word corpora with their frequencies provides a wonderful language-learning tool, as the list of words used within works is a rich vocabulary of actually-used words in the target language, which can be learned with a flashcard learning method.
 
+## Reading a file
+
+## Break lines into words; strip whitespace and punctuation from words; convert to lowercase
+
 ## References
 
 * Downey, A., & Monje, N. (2008). Think OCaml: How to Think Like a Functional Programmer (Version 0.1.1). Green Tea Press; The LATEX source for this book is available from http://www.thinkpython.com. https://greenteapress.com/thinkocaml/thinkocaml.pdf
