@@ -2,6 +2,12 @@
 
 # Soma: Word frequency analysis
 
+```elixir
+Mix.install([
+  {:kino, "~> 0.12.3"}
+])
+```
+
 ## Synopsis
 
 Soma is a small program for the analysis of texts, an outgrowth of an exercise from _Think OCaml_, an OCaml programming textbook (Downey & Monje, 2008, p. 105). The exercise itself is aimed at text manipulation and deriving interesting comparative conclusions between different works, as well as comparisons between the styles of different writers.
@@ -9,6 +15,28 @@ Soma is a small program for the analysis of texts, an outgrowth of an exercise f
 My aim was somewhat different, in that making writing style comparisons—while interesting—aren't a desirable end goal. Instead, deriving word corpora with their frequencies provides a wonderful language-learning tool, as the list of words used within works is a rich vocabulary of actually-used words in the target language, which can be learned with a flashcard learning method.
 
 ## Reading a file
+
+To start, we need to choose the file Soma will read from. `Kino` provides us with a graphical interface, making this an easy task for the user.
+
+```elixir
+file = Kino.Input.file("Select an input file")
+```
+
+`Kino` returns a tuple for a selected file, with `file_ref` as the most important value. Capturing it here makes it easy to use later to get the absolute file path.
+
+```elixir
+%{file_ref: file_ref} =
+  file
+  |> Kino.Input.read()
+```
+
+Using the previously captured `file_ref`, we obtain the file's absolute path, and are able to read it, as required in the following steps.
+
+```elixir
+file_ref
+|> Kino.Input.file_path()
+|> File.read!()
+```
 
 ## Break lines into words; strip whitespace and punctuation from words; convert to lowercase
 
