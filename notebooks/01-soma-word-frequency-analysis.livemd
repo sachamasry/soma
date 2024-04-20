@@ -40,6 +40,31 @@ file_ref
 
 ## Break lines into words; strip whitespace and punctuation from words; convert to lowercase
 
+Breaking a line of text into words is fairly straightforward, with a few possible points of failure which we must guard against:
+
+* Irregular spacing
+* Punctuation
+* Word case
+
+It is likely that imported text may have erroneously-added spacing. Common examples of how this can happen include text that was written on a typewriter, or by a writer with typewriter habits (Butterick, 2024); space inserted in error by OCR software misrecognising the source scanned material; unusual text formatting habits employed by the author.
+
+<!-- livebook:{"break_markdown":true} -->
+
+To help detect some of these errors, we will define an example sentence including the above problems, to be stored in the `sample_sentence` variable.
+
+```elixir
+sample_sentence = "The  quick    brown   fox jumped over the  LAZY dogs.  "
+```
+
+```elixir
+sample_sentence
+|> String.split()
+|> Enum.map(fn word -> String.replace(word, ~r/[\p{P}\p{S}]/, "") end)
+|> Enum.map(fn word -> String.downcase(word) end)
+```
+
 ## References
 
 * Downey, A., & Monje, N. (2008). Think OCaml: How to Think Like a Functional Programmer (Version 0.1.1). Green Tea Press; The LATEX source for this book is available from http://www.thinkpython.com. https://greenteapress.com/thinkocaml/thinkocaml.pdf
+
+* Butterick, M. (2024, April 16). Typewriter habits | Butterick’s Practical Typography. https://practicaltypography.com
