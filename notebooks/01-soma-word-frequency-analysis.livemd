@@ -50,11 +50,27 @@ It is likely that imported text may have erroneously-added spacing. Common examp
 
 <!-- livebook:{"break_markdown":true} -->
 
+Punctuation is an obstacle to building up a dictionary of words used in a text or speech, and must be removed. This step is necesary also as punctuation can easily be discovered in scanned works, where OCR software—used to automate text recognition—misinterprets stains, marks, creases or dust on a document as punctuation marks. Punctuation is overused in very colloquial texts, with _To Kill a Mockingbird_ or _Moby Dick_ as easy examples. The better all pre-, post- and infix punctuation is removed, the more likely we are to get back a true word frequency from our source.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Word case is a problem owing to the way characters are represented in binary. Capital letter codes are different for character codes for lowercase letters; if we don't normalise our source text, occurences of words such as 'Fox', 'FOX', and 'fox' will be treated as three separate words, defeating the purpose of our word frequency calculator. While all three of the above are reasonable uses of the same word—the first as the start of a sentence, the second used in a title, or shouted text, and the third appearing anywhere within a sentence—we must treat them as one word, encountered three times.
+
+<!-- livebook:{"break_markdown":true} -->
+
 To help detect some of these errors, we will define an example sentence including the above problems, to be stored in the `sample_sentence` variable.
 
 ```elixir
-sample_sentence = "The  quick    brown   fox jumped over the  LAZY dogs.  "
+sample_sentence = " \n  The  quick    brown   fox jumped over the  LAZY dogs.  \n\n"
 ```
+
+In the following prototype, the sample sentence will be subjected to a pipeline of three filtering and manipulation actions:
+
+1. Splitting the string with `String.split\1`
+2. Removal of punctuation using a regular expression in `String.replace\3`
+3. Lower casing all the words
+
+Note that the splitting function trims an infinite number of leading and trailing space-like characters, including `tab` and `newline`, by default.
 
 ```elixir
 sample_sentence
