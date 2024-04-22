@@ -79,6 +79,53 @@ sample_sentence
 |> Enum.map(fn word -> String.downcase(word) end)
 ```
 
+With text breaking and cleaning demonstrated, the work is on the right track, but isn't complete.
+
+First of all, the code above will be very slow. Code just sitting on its own inside an Elixir code block is interpreted and unoptimised in any way. By creating a dedicated module, the code will be compiled and optimised, and much faster.
+
+Secondly, the pipeline above is very rigid. All the work is done, and all the options and configuration is made in this one central place, but it doesn't provide flexibility for the future; what if we want to handle text in another language, or if we want to modify some options used in the pipeline, without losing this example?
+
+The answer, again, is to make the code more modular, and this is exactly what we're doing in the following step.
+
+```elixir
+defmodule Soma.Text.Processing do
+  @moduledoc """
+  This module handles all of Soma's text processing needs.
+  """
+
+  def process_text(text) when is_bitstring(text) do
+    text
+    |> break_into_words
+    |> Enum.map(fn word -> strip_punctuation(word) end)
+    |> Enum.map(fn word -> convert_to_lowercase(word) end)
+  end
+
+  def break_into_words(text) do
+    String.split(text)
+  end
+
+  def strip_punctuation(word) do
+    String.replace(word, ~r/[\p{P}\p{S}]/, "")
+  end
+
+  def convert_to_lowercase(word) do
+    String.downcase(word)
+  end
+end
+```
+
+```elixir
+Soma.Text.Processing.process_text(sample_sentence)
+```
+
+We got the same result as we did the first time!
+
+Comparing the first version, we can see that it executed in 11ms (hovering over the 'Evaluated' lozenge in the lower-right corner reveals the execution time), while this new, modular version, producing compatible results, is reported as taking 0ms. Obviously, this is not quite true as the display obviously rounds down to a certain number of significant digits. However, the performance of the second solution is an order of magnitude greater, which is key when it comes to looping over a large body of text, which is what we want this program to do in the future.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Our code is still completely unoptimised, but is already much faster. As our pipeline intensively loops over and over the sample text, we need every bit of performance we can squeeze out of our computer if we're hoping to achieve quick processing of our text, getting a word frequency out within a reasonable time.
+
 ## References
 
 * Downey, A., & Monje, N. (2008). Think OCaml: How to Think Like a Functional Programmer (Version 0.1.1). Green Tea Press; The LATEX source for this book is available from http://www.thinkpython.com. https://greenteapress.com/thinkocaml/thinkocaml.pdf
