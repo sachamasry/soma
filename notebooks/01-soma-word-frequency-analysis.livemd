@@ -105,7 +105,7 @@ defmodule Soma.Text.Processing do
   end
 
   def strip_punctuation(word) do
-    String.replace(word, ~r/[\p{P}\p{S}]/, "")
+    String.replace(word, ~r/[[:punct:]]/, "")
   end
 
   def convert_to_lowercase(word) do
@@ -126,8 +126,20 @@ Comparing the first version, we can see that it executed in 11ms (hovering over 
 
 Our code is still completely unoptimised, but is already much faster. As our pipeline intensively loops over and over the sample text, we need every bit of performance we can squeeze out of our computer if we're hoping to achieve quick processing of our text, getting a word frequency out within a reasonable time.
 
+<!-- livebook:{"break_markdown":true} -->
+
+### Removing punctuation
+
+The simplest method with which to remove English-language punctuation is by using _Regular Expressions_ (Wikipedia contributors, 2024), in particular either the Java-like `\p{Punct}`, or shorter `\p{P}` syntax, or the more portable POSIX syntax, the equivalent of which is `[:punct:]`.
+
+It's important to note here that this only removes punctuation recognised to be that used in English writing; the same syntax _will not_ work in another language, as languages have accrued their own punctuation norms and styles. To handle other languages, we will need to feed a way to recognise punctuation usage in those languages!
+
+Another note is that regular expressions may not be the fastest or most performant way to strip punctuation, especially on large texts, as _every_ character of the provided text is searched, which is likely to be computationally expensive and slow.
+
 ## References
 
 * Downey, A., & Monje, N. (2008). Think OCaml: How to Think Like a Functional Programmer (Version 0.1.1). Green Tea Press; The LATEX source for this book is available from http://www.thinkpython.com. https://greenteapress.com/thinkocaml/thinkocaml.pdf
 
 * Butterick, M. (2024, April 16). Typewriter habits | Butterick’s Practical Typography. https://practicaltypography.com
+
+* Wikipedia contributors. (2024). Regular expression. In Wikipedia. Wikipedia, The Free Encyclopedia. https://en.wikipedia.org/w/index.php?title=Regular_expression&oldid=1218131380
