@@ -10,9 +10,6 @@ The technical breakdown of the project stems from _Think OCaml_, exercise 16.1, 
 ## To do
 
 - Document background research and references
-- Exercise 16.1: Write a program that reads a file, breaks each line into words,
-  strips whitespace and punctuation from the words, and converts them to
-  lowercase
 - Exercise 16.2: Go to Project Gutenberg (gutenberg.net) and download your
   favorite out-ofcopyright book in plain text format. Modify your program from
   the previous exercise to read the book you downloaded, skip over the header
