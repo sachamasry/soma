@@ -75,7 +75,7 @@ Note that the splitting function trims an infinite number of leading and trailin
 ```elixir
 sample_sentence
 |> String.split()
-|> Enum.map(fn word -> String.replace(word, ~r/[\p{P}\p{S}]/, "") end)
+|> Enum.map(fn word -> String.replace(word, ~r/[\p{P}\p{S}]/u, "") end)
 |> Enum.map(fn word -> String.downcase(word) end)
 ```
 
@@ -105,7 +105,7 @@ defmodule Soma.Text.Processing do
   end
 
   def strip_punctuation(word) do
-    String.replace(word, ~r/[[:punct:]]/, "")
+    String.replace(word, ~r/[[:punct:]]/u, "")
   end
 
   def convert_to_lowercase(word) do
@@ -135,6 +135,22 @@ The simplest method with which to remove English-language punctuation is by usin
 It's important to note here that this only removes punctuation recognised to be that used in English writing; the same syntax _will not_ work in another language, as languages have accrued their own punctuation norms and styles. To handle other languages, we will need to feed a way to recognise punctuation usage in those languages!
 
 Another note is that regular expressions may not be the fastest or most performant way to strip punctuation, especially on large texts, as _every_ character of the provided text is searched, which is likely to be computationally expensive and slow.
+
+## Spanish
+
+Does our solution work in other languages? Knowing that punctuation differs accross languages, will the above solution work in Spanish, for example?
+
+To that end, let's define a sample sentence in Spanish, with punctuation as used by that language.
+
+```elixir
+sample_spanish_sentence = "¡Oh! Señor Jesu-Cristo, misericordia, santo"
+```
+
+It turns out that the solution _will_ work, as long as we have inserted a `u` character as a flag to enable Unicode regular expression matching. This is a requirement as Unicode expression-matching is slower by necessity.
+
+```elixir
+Soma.Text.Processing.process_text(sample_spanish_sentence)
+```
 
 ## References
 
