@@ -149,8 +149,30 @@ sample_spanish_sentence = "¡Oh! Señor Jesu-Cristo, misericordia, santo"
 It turns out that the solution _will_ work, as long as we have inserted a `u` character as a flag to enable Unicode regular expression matching. This is a requirement as Unicode expression-matching is slower by necessity.
 
 ```elixir
-Soma.Text.Processing.process_text(sample_spanish_sentence)
+word_list = Soma.Text.Processing.process_text(sample_spanish_sentence)
 ```
+
+## Calculating a word frequency
+
+With words extracted from the text, we return to our guiding task, that is calculating the frequency with which words are used in the text. At first, a primitive effort will suffice, as we really care about the result before optimisation. Later on, optimisation will be crucial once we feed large texts to our processor.
+
+```elixir
+Enum.frequencies(word_list)
+```
+
+The sample sentence in Spanish has no repetitions, which is not very useful for the exercise. Let's try the same on our English-language sample sentence.
+
+```elixir
+sample_sentence
+|> Soma.Text.Processing.process_text()
+|> Enum.frequencies()
+|> Enum.sort_by(
+  fn {_k, c} -> c end,
+  :desc
+)
+```
+
+This sentence gives us exactly what we're after, as the word "the" is repeated twice. Sorting the list in descending order of frequency has provided the answer we wanted. Please note that, for performance reasons, words of equal frequency are not subsequently alphabetically ordered, as we want to avoid a wasteful second comparison loop which would be detrimental to performance.
 
 ## References
 
